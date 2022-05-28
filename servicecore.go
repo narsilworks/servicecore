@@ -10,15 +10,18 @@ import (
 type ServiceCore struct {
 	ID          string // A convenient ID for the service
 	Name        string // Name of the service
+	Copyright   string // Copyright information of the service
 	Description string // Description of the service
+
 	//Args             map[string]ArgumentValue // Arguments upon launch
 	AllowedHeaders []string // Allowed headers for Cross Origin Resource Sharing (CORS)
 	AllowedMethods []string // Allowed methods for Cross Origin Resource Sharing (CORS)
 	//BufferPool       *bpool.BufferPool        // Buffer pool for byte buffers
-	Cache            ICache // Built-in cache manager of the service
-	ContentType      string // Default content type of the service
-	Copyright        string // Copyright information of the service
-	LastMessageCount int    // Indicates the last message count used for enumerating latest messages
+	Cache       ICache  // Caching interface
+	Logger      ILogger // Logging interface
+	ContentType string  // Default content type of the service
+
+	LastMessageCount int // Indicates the last message count used for enumerating latest messages
 	//LocalDB          *ldb.LokalDB             // Local database provider
 	ProductionMode  bool     // Production mode flag
 	PublishedEvents []string // List of the public events that the service publishes
