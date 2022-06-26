@@ -16,6 +16,7 @@ type ServiceCore struct {
 	Cache              ICache             // Caching interface
 	Logger             ILogger            // Logging interface
 	Queue              IQueue             //
+	Data IData
 	LocalDB            ILocalData         // Local database provider
 	Production         bool               // Production mode flag
 	Router             http.Handler       // Built-in router of the service
