@@ -1,4 +1,4 @@
-package servicecore
+package ifcs
 
 type ILocalData interface {
 	Fetch(bucket string, key string) (data []byte, err error)

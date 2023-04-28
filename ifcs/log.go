@@ -1,5 +1,5 @@
-package servicecore
+package ifcs
 
 type ILogger interface {
-	Log()
+	Log(string)
 }
