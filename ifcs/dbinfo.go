@@ -1,8 +1,6 @@
 package ifcs
 
-import (
-	sg "github.com/narsilworks/servicecore/str"
-)
+import strct "github.com/narsilworks/servicecore/strct"
 
 type IDatabaseInfo interface {
 	ConnectionString() string
@@ -12,5 +10,5 @@ type IDatabaseInfo interface {
 	ConnectionInfo() (maxOpen, maxIdle, maxConLt, maxConnIt int)
 	ParameterInfo() (placeHolder string, inSequence bool)
 	SQLStringInfo() (enclosing, escape, rwEscape string)
-	Sequence() sg.SequenceGeneratorInfo
+	Sequence() strct.SequenceGeneratorInfo
 }

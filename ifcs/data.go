@@ -7,6 +7,7 @@ import (
 )
 
 type IData interface {
+	ID() string
 	Open(ctx context.Context, di IDatabaseInfo) error                  // Open a new connection
 	Exec(sql string, args ...interface{}) (int64, error)               // Exec executes a non-returning query
 	Exists(sqlWithParams string, args ...interface{}) (bool, error)    // Checks existence of a record

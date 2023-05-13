@@ -5,30 +5,25 @@ import (
 	"time"
 
 	ln "github.com/narsilworks/livenote"
-	"github.com/narsilworks/servicecore/dumm"
-	"github.com/narsilworks/servicecore/ifcs"
 )
 
 type ServiceCore struct {
-	ID                 string // A convenient ID for the service
-	Name               string // Name of the service
-	Copyright          string // Copyright information of the service
-	Description        string // Description of the service
+	// Configurable at service creation
+	// This are manually coded at the derivative code
+	id          string // A convenient ID for the service
+	name        string // Name of the service
+	copyright   string // Copyright information of the service
+	description string // Description of the service
+	version     string // Version of the service
+
+	// Set before service starts
+	//
+	setter serviceSetter
+
 	DefaultContentType string // Default content type of the service
 	DefaultHostPort    int    //
 	Production         bool   // Production mode flag
-	Version            string // Version of the service
-
-	cache     ifcs.ICache         // Caching interface
-	logger    ifcs.ILogger        // Logging interface. Required.
-	queue     ifcs.IQueue         // Queue/Messaging interface
-	data      []ifcs.IData        // Data access interface
-	localData ifcs.ILocalData     // Local database provider
-	cors      ifcs.ICORS          // CORS interface
-	router    ifcs.IRouter        // Built-in router of the service. Required.
-	config    ifcs.IConfiguration // Configuration settings of the service. Required.
-
-	ShutdownEvent func() // Shutdown event processing for graceful exit
+	ShutdownEvent      func() // Shutdown event processing for graceful exit
 
 	appControllerURL string //
 
@@ -44,44 +39,65 @@ type ServiceCore struct {
 	started         time.Time //
 }
 
-func Create() (*ServiceCore, error) {
-	return &ServiceCore{}, nil
+func Create(identity map[string]any) (*ServiceCore, error) {
+
+	id := "SAMPLE"
+	mapValue(&identity, "id", &id)
+
+	return &ServiceCore{
+		messages: *ln.NewLiveNote(id),
+	}, nil
 }
 
-func (sc *ServiceCore) Cache() ifcs.ICache {
-	if sc.cache == nil {
-		return &dumm.Cache{}
+func (sc *ServiceCore) ID() string {
+	return sc.id
+}
+
+func (sc *ServiceCore) Name() string {
+	return sc.name
+}
+
+func (sc *ServiceCore) Description() string {
+	return sc.description
+}
+
+func (sc *ServiceCore) Copyright() string {
+	return sc.copyright
+}
+
+func (sc *ServiceCore) Version() string {
+	return sc.version
+}
+
+func (sc *ServiceCore) Started() *time.Time {
+	return &sc.started
+}
+
+func (sc *ServiceCore) Set() *serviceSetter {
+	return &sc.setter
+}
+
+func (sc *ServiceCore) Get() *serviceGetter {
+	return &serviceGetter{
+		&sc.setter,
 	}
-	return sc.cache
 }
 
-func (sc *ServiceCore) Logger() ifcs.ILogger {
-	return sc.logger
-}
-
-func (sc *ServiceCore) Queue() ifcs.IQueue {
-	return sc.queue
-}
-
-func (sc *ServiceCore) Data() []ifcs.IData {
-	return sc.data
-}
-
-func (sc *ServiceCore) LocalData() ifcs.ILocalData {
-	return sc.localData
-}
-
-func (sc *ServiceCore) CORS() ifcs.ICORS {
-	if sc.cors == nil {
-		return &dumm.CORS{}
+func mapValue[T any](identity *map[string]any, key string, out *T) {
+	if identity == nil || len(*identity) == 0 {
+		return
 	}
-	return sc.cors
+
+	val, ok := (*identity)["id"]
+	if !ok {
+		return
+	}
+
+	if rval, ok := val.(T); ok {
+		*out = rval
+	}
 }
 
-func (sc *ServiceCore) Router() ifcs.IRouter {
-	return sc.router
-}
+func Serve() {
 
-func (sc *ServiceCore) Configuration() ifcs.IConfiguration {
-	return sc.config
 }

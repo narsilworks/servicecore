@@ -1,4 +1,4 @@
-package str
+package strct
 
 type SequenceGeneratorInfo struct {
 	UpsertQuery     string

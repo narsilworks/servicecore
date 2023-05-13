@@ -1,4 +1,4 @@
-package imp
+package impl
 
 import (
 	"context"
@@ -38,6 +38,16 @@ func (rc *RedisCache) Get(dst []byte, key string) []byte {
 	}
 
 	return []byte(val)
+}
+
+// Get value by key that outputs error
+func (rc *RedisCache) GetWithErr(key string) ([]byte, error) {
+	val, err := rc.rdb.Get(rc.ctx, key).Result()
+	if err != nil || err == redis.Nil {
+		return []byte{}, err
+	}
+
+	return []byte(val), nil
 }
 
 // Del removes the value by key
