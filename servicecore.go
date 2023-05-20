@@ -1,10 +1,12 @@
 package servicecore
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	ln "github.com/narsilworks/livenote"
+	"github.com/segmentio/ksuid"
 )
 
 type ServiceCore struct {
@@ -42,10 +44,24 @@ type ServiceCore struct {
 func Create(identity map[string]any) (*ServiceCore, error) {
 
 	id := "SAMPLE"
+	name := "Sample Service"
+	copyright := "Copyright 2023, NarsilWorks, Inc."
+	description := "Sample service description"
+	version := "1.0"
+
 	mapValue(&identity, "id", &id)
+	mapValue(&identity, "name", &name)
+	mapValue(&identity, "copyright", &copyright)
+	mapValue(&identity, "description", &description)
+	mapValue(&identity, "version", &version)
 
 	return &ServiceCore{
-		messages: *ln.NewLiveNote(id),
+		id:          id,
+		name:        name,
+		copyright:   copyright,
+		description: description,
+		version:     version,
+		messages:    *ln.NewLiveNote(""),
 	}, nil
 }
 
@@ -88,7 +104,7 @@ func mapValue[T any](identity *map[string]any, key string, out *T) {
 		return
 	}
 
-	val, ok := (*identity)["id"]
+	val, ok := (*identity)[key]
 	if !ok {
 		return
 	}
@@ -98,6 +114,25 @@ func mapValue[T any](identity *map[string]any, key string, out *T) {
 	}
 }
 
-func Serve() {
+func (s *ServiceCore) Serve() {
+	s.modInstance = ksuid.New().String()
+	s.started = time.Now()
+	s.messages.AddAppMsg(s.name)
+	if s.description != "" {
+		s.messages.AddAppMsg(s.description)
+	}
+	s.messages.AddAppMsg(fmt.Sprintf(`Version %s`, s.version))
+	s.messages.AddAppMsg(s.copyright)
+	s.messages.AddInfo(fmt.Sprintf(`Application id: %s`, s.id))
+	s.messages.AddInfo(fmt.Sprintf(`Module instance %s`, s.modInstance))
+
+	// start logging
+	// l, err := s.Get().Logger()
+	// if err!=nil {
+	// 	l = fmt.Logger
+	// }
+	for _, m := range s.messages.Notes() {
+		fmt.Println(m.ToString())
+	}
 
 }

@@ -8,9 +8,12 @@ import (
 )
 
 func main() {
-	sc, err := servicecore.Create(map[string]any{
-		"id": "SUPERSERVICE",
-	})
+	sc, err := servicecore.Create(
+		map[string]any{
+			"id":        "SUPERSERVICE",
+			"name":      "Super Service Application",
+			"copyright": "Copyright 1976, ACME, Inc.",
+		})
 	if err != nil {
 		return
 	}
@@ -25,4 +28,6 @@ func main() {
 	}
 
 	c.Del("")
+
+	sc.Serve()
 }
