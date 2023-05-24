@@ -20,6 +20,7 @@ func main() {
 
 	rc := impl.NewRedisCache("", "", 0)
 
+	// Set cache
 	sc.Set().Cache(rc)
 	c, err := sc.Get().Cache()
 	if err != nil {
@@ -29,5 +30,6 @@ func main() {
 
 	c.Del("")
 
+	// Serve
 	sc.Serve()
 }
