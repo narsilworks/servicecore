@@ -40,7 +40,7 @@ type ServiceCore struct {
 	modInstance     string    // Module instance id
 	publishedEvents []string  // List of the public events that the service publishes
 	started         time.Time //
-	lgr             ifcs.ILogger
+
 }
 
 func Create(identity map[string]any) (*ServiceCore, error) {
@@ -133,7 +133,7 @@ func (s *ServiceCore) Serve() {
 	s.messages.AddAppMsg(s.copyright)
 
 	// start logging
-	s.lgr, err = s.Get().Logger()
+	lgr, err := s.Get().Logger()
 	if err != nil {
 		s.messages.AddAppMsg(fmt.Sprintf(`Logger error: %s, using standard output.`, err))
 	}
@@ -143,10 +143,13 @@ func (s *ServiceCore) Serve() {
 
 	// succeeding functions to be initialized here
 
+	// messages after http serve
+	// serve will be run using go()
+
 	// display logs
 	for _, m := range s.messages.Notes() {
-		if s.lgr != nil {
-			s.lgr.Log(ifcs.LogType(m.Type), m.Message)
+		if lgr != nil {
+			lgr.Log(ifcs.LogType(m.Type), m.Message)
 			continue
 		}
 
