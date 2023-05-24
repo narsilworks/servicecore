@@ -53,3 +53,8 @@ func (s *serviceSetter) LocalData(i ifcs.ILocalData) {
 func (s *serviceSetter) CORS(i ifcs.ICORS) {
 	s.cors = i
 }
+
+// Notification set the notification settings of the service
+func (s *serviceSetter) Notification(i ifcs.INotification) {
+	s.notification = i
+}
