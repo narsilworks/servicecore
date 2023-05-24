@@ -1,5 +1,5 @@
 package ifcs
 
 type ILogger interface {
-	Log(string)
+	Log(LogType, string)
 }

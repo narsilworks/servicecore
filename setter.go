@@ -3,14 +3,15 @@ package servicecore
 import "github.com/narsilworks/servicecore/ifcs"
 
 type serviceSetter struct {
-	cache     ifcs.ICache         // Caching interface
-	logger    ifcs.ILogger        // Logging interface. Required.
-	queue     ifcs.IQueue         // Queue/Messaging interface
-	data      []ifcs.IData        // Data access interface
-	localData ifcs.ILocalData     // Local database provider
-	cors      ifcs.ICORS          // CORS interface
-	router    ifcs.IRouter        // Built-in router of the service. Required.
-	config    ifcs.IConfiguration // Configuration settings of the service. Required.
+	cache        ifcs.ICache         // Caching interface
+	logger       ifcs.ILogger        // Logging interface. Required.
+	queue        ifcs.IQueue         // Queue/Messaging interface
+	data         []ifcs.IData        // Data access interface
+	localData    ifcs.ILocalData     // Local database provider
+	cors         ifcs.ICORS          // CORS interface
+	router       ifcs.IRouter        // Built-in router of the service. Required.
+	config       ifcs.IConfiguration // Configuration settings of the service. Required.
+	notification ifcs.INotification  // Notification settings
 }
 
 // Config sets the available configuration for the service.

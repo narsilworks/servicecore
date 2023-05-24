@@ -1,6 +1,6 @@
 package ifcs
 
-import strct "github.com/narsilworks/servicecore/strct"
+import "github.com/narsilworks/servicecore/dto"
 
 type IDatabaseInfo interface {
 	ConnectionString() string
@@ -10,5 +10,5 @@ type IDatabaseInfo interface {
 	ConnectionInfo() (maxOpen, maxIdle, maxConLt, maxConnIt int)
 	ParameterInfo() (placeHolder string, inSequence bool)
 	SQLStringInfo() (enclosing, escape, rwEscape string)
-	Sequence() strct.SequenceGeneratorInfo
+	Sequence() dto.SequenceGeneratorInfo
 }

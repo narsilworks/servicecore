@@ -7,66 +7,77 @@ import (
 	"github.com/narsilworks/servicecore/ifcs"
 )
 
-type serviceGetter struct {
+type ServiceGetter struct {
 	setter *serviceSetter
 }
 
-func (g *serviceGetter) Config() (ifcs.IConfiguration, error) {
+var ErrSetterNotSet error = errors.New(`setter not set`)
+var ErrConfigNotSet error = errors.New(`configuration function not set`)
+var ErrLoggerNotSet error = errors.New(`logger function not set`)
+var ErrRouterNotSet error = errors.New(`router function not set`)
+var ErrCacheNotSet error = errors.New(`cache function not set`)
+var ErrQueueNotSet error = errors.New(`queue function not set`)
+var ErrDataNotSet error = errors.New(`data function not set`)
+var ErrLocalDataNotSet error = errors.New(`local data function not set`)
+var ErrCORSNotSet error = errors.New(`cors function not set`)
+var ErrNotificationNotSet error = errors.New(`notification function not set`)
+
+func (g *ServiceGetter) Config() (ifcs.IConfiguration, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.config == nil {
-		return nil, errors.New("configuration not set")
+		return nil, ErrConfigNotSet
 	}
 	return g.setter.config, nil
 }
 
-func (g *serviceGetter) Logger() (ifcs.ILogger, error) {
+func (g *ServiceGetter) Logger() (ifcs.ILogger, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.logger == nil {
-		return nil, errors.New("logger not set")
+		return nil, ErrLoggerNotSet
 	}
 	return g.setter.logger, nil
 }
 
-func (g *serviceGetter) Router() (ifcs.IRouter, error) {
+func (g *ServiceGetter) Router() (ifcs.IRouter, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.router == nil {
-		return nil, errors.New("router not set")
+		return nil, ErrRouterNotSet
 	}
 	return g.setter.router, nil
 }
 
-func (g *serviceGetter) Cache() (ifcs.ICache, error) {
+func (g *ServiceGetter) Cache() (ifcs.ICache, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.cache == nil {
-		return nil, errors.New("Cache not set")
+		return nil, ErrCacheNotSet
 	}
 	return g.setter.cache, nil
 }
 
-func (g *serviceGetter) Queue() (ifcs.IQueue, error) {
+func (g *ServiceGetter) Queue() (ifcs.IQueue, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.queue == nil {
-		return nil, errors.New("queue not set")
+		return nil, ErrQueueNotSet
 	}
 	return g.setter.queue, nil
 }
 
-func (g *serviceGetter) Data(id string) (ifcs.IData, error) {
+func (g *ServiceGetter) Data(id string) (ifcs.IData, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.data == nil {
-		return nil, errors.New("data not set")
+		return nil, ErrDataNotSet
 	}
 
 	for _, d := range g.setter.data {
@@ -78,22 +89,32 @@ func (g *serviceGetter) Data(id string) (ifcs.IData, error) {
 	return nil, errors.New("data id not found")
 }
 
-func (g *serviceGetter) LocalData() (ifcs.ILocalData, error) {
+func (g *ServiceGetter) LocalData() (ifcs.ILocalData, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.localData == nil {
-		return nil, errors.New("local data not set")
+		return nil, ErrLocalDataNotSet
 	}
 	return g.setter.localData, nil
 }
 
-func (g *serviceGetter) CORS() (ifcs.ICORS, error) {
+func (g *ServiceGetter) CORS() (ifcs.ICORS, error) {
 	if g.setter == nil {
-		return nil, errors.New("setter not set")
+		return nil, ErrSetterNotSet
 	}
 	if g.setter.cors == nil {
-		return nil, errors.New("cors not set")
+		return nil, ErrCORSNotSet
 	}
 	return g.setter.cors, nil
+}
+
+func (g *ServiceGetter) Notification() (ifcs.INotification, error) {
+	if g.setter == nil {
+		return nil, ErrSetterNotSet
+	}
+	if g.setter.notification == nil {
+		return nil, ErrNotificationNotSet
+	}
+	return g.setter.notification, nil
 }

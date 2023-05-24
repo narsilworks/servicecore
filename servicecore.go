@@ -6,6 +6,7 @@ import (
 	"time"
 
 	ln "github.com/narsilworks/livenote"
+	"github.com/narsilworks/servicecore/ifcs"
 	"github.com/segmentio/ksuid"
 )
 
@@ -39,6 +40,7 @@ type ServiceCore struct {
 	modInstance     string    // Module instance id
 	publishedEvents []string  // List of the public events that the service publishes
 	started         time.Time //
+	lgr             ifcs.ILogger
 }
 
 func Create(identity map[string]any) (*ServiceCore, error) {
@@ -93,8 +95,8 @@ func (sc *ServiceCore) Set() *serviceSetter {
 	return &sc.setter
 }
 
-func (sc *ServiceCore) Get() *serviceGetter {
-	return &serviceGetter{
+func (sc *ServiceCore) Get() *ServiceGetter {
+	return &ServiceGetter{
 		&sc.setter,
 	}
 }
@@ -115,24 +117,40 @@ func mapValue[T any](identity *map[string]any, key string, out *T) {
 }
 
 func (s *ServiceCore) Serve() {
+
+	var (
+		err error
+	)
+
 	s.modInstance = ksuid.New().String()
 	s.started = time.Now()
+
 	s.messages.AddAppMsg(s.name)
 	if s.description != "" {
 		s.messages.AddAppMsg(s.description)
 	}
 	s.messages.AddAppMsg(fmt.Sprintf(`Version %s`, s.version))
 	s.messages.AddAppMsg(s.copyright)
+
+	// start logging
+	s.lgr, err = s.Get().Logger()
+	if err != nil {
+		s.messages.AddAppMsg(fmt.Sprintf(`Logger error: %s, using standard output.`, err))
+	}
+
 	s.messages.AddInfo(fmt.Sprintf(`Application id: %s`, s.id))
 	s.messages.AddInfo(fmt.Sprintf(`Module instance %s`, s.modInstance))
 
-	// start logging
-	// l, err := s.Get().Logger()
-	// if err!=nil {
-	// 	l = fmt.Logger
-	// }
+	// succeeding functions to be initialized here
+
+	// display logs
 	for _, m := range s.messages.Notes() {
-		fmt.Println(m.ToString())
+		if s.lgr != nil {
+			s.lgr.Log(ifcs.LogType(m.Type), m.Message)
+			continue
+		}
+
+		fmt.Printf("%s %s\r\n", time.Now().Format(time.RFC3339), m.ToString())
 	}
 
 }
