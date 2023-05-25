@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/jessevdk/go-flags"
 	ln "github.com/narsilworks/livenote"
 	"github.com/narsilworks/servicecore/ifcs"
 	"github.com/segmentio/ksuid"
@@ -125,7 +126,8 @@ func mapValue[T any](identity *map[string]any, key string, out *T) {
 func (s *ServiceCore) Serve() {
 
 	var (
-		err error
+		err  error
+		opts options
 	)
 
 	s.modInstance = ksuid.New().String()
@@ -146,6 +148,9 @@ func (s *ServiceCore) Serve() {
 
 	s.messages.AddInfo(fmt.Sprintf(`Application id: %s`, s.id))
 	s.messages.AddInfo(fmt.Sprintf(`Module instance %s`, s.modInstance))
+
+	// Get command line parameters
+	flags.NewParser(&opts, flags.IgnoreUnknown).Parse()
 
 	// succeeding functions to be initialized here
 
