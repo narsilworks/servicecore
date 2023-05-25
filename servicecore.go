@@ -20,13 +20,11 @@ type ServiceCore struct {
 	version     string // Version of the service
 
 	// Set before service starts
-	//
 	setter serviceSetter
 
 	DefaultContentType string // Default content type of the service
 	DefaultHostPort    int    //
-	Production         bool   // Production mode flag
-	ShutdownEvent      func() // Shutdown event processing for graceful exit
+	OnShutdown         func() // Shutdown event processing for graceful exit
 
 	appControllerURL string //
 
@@ -34,12 +32,12 @@ type ServiceCore struct {
 	launchArgs map[string]any // Arguments upon launch
 	messages   ln.LiveNote    // Message logged while launching the service
 
-	mime map[string]string
-
 	appInstance     string    //
 	modInstance     string    // Module instance id
 	publishedEvents []string  // List of the public events that the service publishes
 	started         time.Time //
+	productionMode  bool      // Indicates if the service is in production mode or not
+	hostPort        int       // the port where the service listens
 
 }
 
@@ -99,6 +97,14 @@ func (sc *ServiceCore) Get() *ServiceGetter {
 	return &ServiceGetter{
 		&sc.setter,
 	}
+}
+
+func (sc *ServiceCore) RunMode() bool {
+	return sc.productionMode
+}
+
+func (sc *ServiceCore) HostPort() int {
+	return sc.hostPort
 }
 
 func mapValue[T any](identity *map[string]any, key string, out *T) {
