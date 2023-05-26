@@ -100,7 +100,7 @@ func (sc *ServiceCore) Get() *ServiceGetter {
 	}
 }
 
-func (sc *ServiceCore) RunMode() bool {
+func (sc *ServiceCore) Production() bool {
 	return sc.productionMode
 }
 
