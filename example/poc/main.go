@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/narsilworks/servicecore"
-	impl "github.com/narsilworks/servicecore/impl"
 )
 
 func main() {
@@ -18,17 +15,17 @@ func main() {
 		return
 	}
 
-	rc := impl.NewRedisCache("", "", 0)
+	// rc := impl.NewRedisCache("", "", 0)
 
-	// Set cache
-	sc.Set().Cache(rc)
-	c, err := sc.Get().Cache()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// // Set cache
+	// sc.Set().Cache(rc)
+	// c, err := sc.Get().Cache()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
-	c.Del("")
+	// c.Del("")
 
 	// Serve
 	sc.Serve()

@@ -1,6 +1,8 @@
 package ifcs
 
 type IConfiguration interface {
-	Save(fileName string) error
+	Save(fn string) error
 	Reload() error
+	GetFileName() string
+	SetFileName(fn string)
 }

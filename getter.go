@@ -72,7 +72,18 @@ func (g *ServiceGetter) Queue() (ifcs.IQueue, error) {
 	return g.setter.queue, nil
 }
 
-func (g *ServiceGetter) Data(id string) (ifcs.IData, error) {
+func (g *ServiceGetter) Data() ([]ifcs.IData, error) {
+	if g.setter == nil {
+		return nil, ErrSetterNotSet
+	}
+	if g.setter.data == nil {
+		return nil, ErrDataNotSet
+	}
+
+	return g.setter.data, nil
+}
+
+func (g *ServiceGetter) Datum(id string) (ifcs.IData, error) {
 	if g.setter == nil {
 		return nil, ErrSetterNotSet
 	}

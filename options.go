@@ -30,4 +30,7 @@ type options struct {
 
 	// AppController - String. URL of the one that invoked the tasker to launch
 	AppController *string `long:"app-controller" short:"a"`
+
+	// Disable setter log
+	DisableSetterLog *bool `long:"disable-setter-log"`
 }
