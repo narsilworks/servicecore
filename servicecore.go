@@ -143,6 +143,7 @@ func (sc *ServiceCore) HostPort() int {
 	return sc.hostPort
 }
 
+// Serve runs the server
 func (s *ServiceCore) Serve() {
 
 	var (
